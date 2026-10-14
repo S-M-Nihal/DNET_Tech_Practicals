@@ -1,0 +1,302 @@
+﻿@model FeedbackManagementApp.Models.Feedback
+
+@{
+    ViewData["Title"] = "Share Your Experience";
+}
+
+<style>
+    /* Clean, modern geometric star rating */
+    .star-rating-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+    }
+
+    .rating-star-btn {
+        background: transparent;
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        outline: none;
+        transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .rating-star-btn:hover {
+        transform: scale(1.18);
+    }
+
+    .star-icon {
+        width: 28px;
+        height: 28px;
+        fill: transparent;
+        stroke: #64748b;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: fill 0.15s ease, stroke 0.15s ease, filter 0.2s ease;
+    }
+
+    /* Active & Hover states */
+    .rating-star-btn.active .star-icon,
+    .rating-star-btn.hovered .star-icon {
+        fill: #f59e0b;
+        stroke: #f59e0b;
+        filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.45));
+    }
+
+    .rating-feedback-badge {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #94a3b8;
+        min-width: 110px;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+        <div class="glass-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <span class="badge bg-primary bg-opacity-25 text-primary px-3 py-2 rounded-pill fw-semibold">User Opinions</span>
+                <h3 class="fw-bold text-white mt-2">Share Your Feedback</h3>
+                <p class="text-muted small">Your perspective helps improve the quality of our application.</p>
+            </div>
+
+            <form asp-action="Create" method="post" id="feedbackForm">
+                @Html.AntiForgeryToken()
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label text-light small fw-semibold"></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person"></i></span>
+                        <input asp-for="FullName" class="form-control bg-dark border-secondary text-white" placeholder="e.g. Alex Morgan" />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label text-light small fw-semibold"></label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-envelope"></i></span>
+                        <input asp-for="Email" class="form-control bg-dark border-secondary text-white" placeholder="alex@example.com" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <!-- Feedback Category Section -->
+                <div class="mb-3">
+                    <label class="form-label text-light small fw-semibold">Feedback Category</label>
+                    
+                    <!-- Hidden input bound directly to Model.Category -->
+                    <input type="hidden" asp-for="Category" id="finalCategoryInput" />
+
+                    <select class="form-select bg-dark border-secondary text-white" id="categorySelect">
+                        <option value="">-- Choose Category --</option>
+                        <option value="UI/UX Experience">UI/UX Experience</option>
+                        <option value="Performance">Performance & Speed</option>
+                        <option value="Bug Report">Bug / Technical Glitch</option>
+                        <option value="Feature Request">Feature Request</option>
+                        <option value="General Suggestion">General Suggestion</option>
+                        <option value="Other">Others (Type Custom Category)</option>
+                    </select>
+                    
+                    <!-- Dynamic Custom Category Input (shown when "Other" is chosen) -->
+                    <div id="customCategoryContainer" class="mt-2" style="display: none;">
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary">
+                                <i class="bi bi-tag-fill"></i>
+                            </span>
+                            <input type="text" id="customCategoryInput" class="form-control bg-dark border-secondary text-white" 
+                                   placeholder="Type your category title (e.g. Billing, Security)..." />
+                        </div>
+                    </div>
+
+                    <span asp-validation-for="Category" class="text-danger small mt-1 d-block" id="categoryErrorSpan"></span>
+                </div>
+
+                <!-- Star Rating Section -->
+                <div class="mb-4">
+                    <label asp-for="Rating" class="form-label text-light small fw-semibold d-block"></label>
+                    
+                    <!-- Hidden input starts empty so no star is selected by default -->
+                    <input type="hidden" asp-for="Rating" id="ratingInput" value="@(Model.Rating.HasValue ? Model.Rating.ToString() : "")" />
+
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="star-rating-box" id="starBox">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <button type="button" class="rating-star-btn" data-value="@i" aria-label="Rate @i stars">
+                                    <svg class="star-icon" viewBox="0 0 24 24">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                </button>
+                            }
+                        </div>
+                        <span id="ratingStatusText" class="rating-feedback-badge">Click to rate</span>
+                    </div>
+
+                    <span asp-validation-for="Rating" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <!-- Comments -->
+                <div class="mb-4">
+                    <label asp-for="Comments" class="form-label text-light small fw-semibold"></label>
+                    <textarea asp-for="Comments" rows="4" class="form-control bg-dark border-secondary text-white" placeholder="Tell us what you liked or what can be improved..."></textarea>
+                    <span asp-validation-for="Comments" class="text-danger small"></span>
+                </div>
+
+                <!-- Submit Button Area -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-modern py-2">
+                        <i class="bi bi-send-fill me-1"></i> Submit Feedback
+                    </button>
+                    <a asp-action="Index" class="btn btn-link text-decoration-none text-muted small mt-1 text-center">
+                        Cancel and return to dashboard
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // --- Elements ---
+        const ratingInput = document.getElementById('ratingInput');
+        const starBtns = document.querySelectorAll('.rating-star-btn');
+        const starBox = document.getElementById('starBox');
+        const ratingStatusText = document.getElementById('ratingStatusText');
+
+        const categorySelect = document.getElementById('categorySelect');
+        const customCategoryContainer = document.getElementById('customCategoryContainer');
+        const customCategoryInput = document.getElementById('customCategoryInput');
+        const finalCategoryInput = document.getElementById('finalCategoryInput');
+        const categoryErrorSpan = document.getElementById('categoryErrorSpan');
+        const feedbackForm = document.getElementById('feedbackForm');
+
+        const ratingLabels = {
+            1: "Poor (1/5)",
+            2: "Fair (2/5)",
+            3: "Good (3/5)",
+            4: "Very Good (4/5)",
+            5: "Excellent (5/5)"
+        };
+
+        // --- Category Logic ---
+        function clearCategoryError() {
+            if (finalCategoryInput.value.trim() !== "") {
+                if (categoryErrorSpan) {
+                    categoryErrorSpan.textContent = "";
+                    categoryErrorSpan.classList.remove('field-validation-error');
+                    categoryErrorSpan.classList.add('field-validation-valid');
+                }
+            }
+        }
+
+        categorySelect.addEventListener('change', function () {
+            const selectedVal = this.value;
+
+            if (selectedVal === "Other") {
+                customCategoryContainer.style.display = "block";
+                customCategoryInput.focus();
+                finalCategoryInput.value = customCategoryInput.value.trim();
+            } else {
+                customCategoryContainer.style.display = "none";
+                customCategoryInput.value = "";
+                finalCategoryInput.value = selectedVal;
+            }
+
+            clearCategoryError();
+        });
+
+        customCategoryInput.addEventListener('input', function () {
+            finalCategoryInput.value = this.value.trim();
+            clearCategoryError();
+        });
+
+        // --- Star Rating Logic ---
+        const initialVal = parseInt(ratingInput.value);
+        if (!isNaN(initialVal) && initialVal > 0) {
+            applyActiveStars(initialVal);
+        }
+
+        starBtns.forEach(btn => {
+            const val = parseInt(btn.getAttribute('data-value'));
+
+            btn.addEventListener('mouseenter', () => {
+                highlightStars(val);
+                ratingStatusText.textContent = ratingLabels[val];
+            });
+
+            btn.addEventListener('click', () => {
+                ratingInput.value = val;
+                applyActiveStars(val);
+
+                if (window.jQuery && $(ratingInput).valid) {
+                    $(ratingInput).valid();
+                }
+            });
+        });
+
+        starBox.addEventListener('mouseleave', () => {
+            const currentSelected = parseInt(ratingInput.value);
+            if (!isNaN(currentSelected) && currentSelected > 0) {
+                applyActiveStars(currentSelected);
+            } else {
+                clearAllStars();
+                ratingStatusText.textContent = "Click to rate";
+            }
+        });
+
+        function highlightStars(count) {
+            starBtns.forEach(btn => {
+                const btnVal = parseInt(btn.getAttribute('data-value'));
+                if (btnVal <= count) {
+                    btn.classList.add('hovered');
+                } else {
+                    btn.classList.remove('hovered');
+                }
+            });
+        }
+
+        function applyActiveStars(count) {
+            starBtns.forEach(btn => {
+                const btnVal = parseInt(btn.getAttribute('data-value'));
+                btn.classList.remove('hovered');
+                if (btnVal <= count) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            ratingStatusText.textContent = ratingLabels[count] || "";
+            ratingStatusText.style.color = "#fbbf24";
+        }
+
+        function clearAllStars() {
+            starBtns.forEach(btn => {
+                btn.classList.remove('active', 'hovered');
+            });
+            ratingStatusText.style.color = "#94a3b8";
+        }
+
+        // --- Form Validation Interceptor ---
+        feedbackForm.addEventListener('submit', function (e) {
+            if (categorySelect.value === "Other" && !customCategoryInput.value.trim()) {
+                e.preventDefault();
+                categoryErrorSpan.textContent = "Please specify your custom category heading.";
+                categoryErrorSpan.classList.add('field-validation-error');
+                customCategoryInput.focus();
+            }
+        });
+    </script>
+}

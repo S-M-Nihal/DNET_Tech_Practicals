@@ -1,0 +1,16 @@
+﻿@model FeedbackManagementApp.Models.Feedback
+
+<div class="card shadow-sm mb-3 border-0 border-start border-4 border-primary">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <h5 class="card-title mb-0 fw-semibold">@Model.FullName</h5>
+            <span class="badge bg-primary">Rating: @Model.Rating / 5</span>
+        </div>
+        <p class="text-muted small mb-2">
+            <strong>Email:</strong> @Model.Email | 
+            <strong>Category:</strong> <span class="badge bg-secondary">@Model.Category</span> |
+            <span>@Model.SubmittedAt.ToString("dd MMM yyyy, hh:mm tt")</span>
+        </p>
+        <p class="card-text text-dark">@Model.Comments</p>
+    </div>
+</div>
