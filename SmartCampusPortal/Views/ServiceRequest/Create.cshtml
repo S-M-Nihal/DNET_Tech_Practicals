@@ -1,0 +1,83 @@
+﻿@model SmartCampusPortal.Models.ServiceRequest
+@{
+    ViewData["Title"] = "Log New Campus Service Ticket";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h5 class="mb-0 fw-bold text-primary">
+                    <i class="bi bi-plus-square-dotted me-2"></i>Log New Smart Campus Service Request
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="RequesterName" class="form-label fw-semibold"></label>
+                            <input asp-for="RequesterName" class="form-control" placeholder="e.g., Nihal S. M." />
+                            <span asp-validation-for="RequesterName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CampusId" class="form-label fw-semibold"></label>
+                            <input asp-for="CampusId" class="form-control" placeholder="e.g., 23CSE045 or FAC-104" />
+                            <span asp-validation-for="CampusId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Category" class="form-label fw-semibold"></label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="">-- Select Department --</option>
+                                <option value="IT Support">IT Support</option>
+                                <option value="Lab Maintenance">Lab Maintenance</option>
+                                <option value="Library">Library</option>
+                                <option value="Hostel & Campus Wi-Fi">Hostel & Campus Wi-Fi</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Priority" class="form-label fw-semibold"></label>
+                            <select asp-for="Priority" class="form-select">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical (Urgent Attention)</option>
+                            </select>
+                            <span asp-validation-for="Priority" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Location" class="form-label fw-semibold"></label>
+                            <input asp-for="Location" class="form-control" placeholder="e.g., Computer Block - Lab 2, Room 204" />
+                            <span asp-validation-for="Location" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Provide clear details about the hardware, software, or facility issue..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-light border px-4">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                            <i class="bi bi-send-check-fill me-1"></i>Submit Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

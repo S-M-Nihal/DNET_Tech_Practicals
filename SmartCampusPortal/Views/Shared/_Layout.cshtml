@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Smart Campus Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+            body {
+                background-color: #f4f7fb;
+                font-family: 'Segoe UI', system-ui, sans-serif;
+            }
+
+            .navbar-campus {
+                background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            }
+
+            .stat-card {
+                border: none;
+                border-radius: 14px;
+                transition: transform 0.15s ease;
+            }
+
+                .stat-card:hover {
+                    transform: translateY(-3px);
+                }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-campus shadow-sm mb-4 py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" asp-controller="ServiceRequest" asp-action="Index">
+                    <i class="bi bi-cpu-fill text-info fs-4"></i>
+                    <span>SmartCampus <span class="fw-light text-info">Service Portal</span></span>
+                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-outline-light btn-sm" asp-controller="ServiceRequest" asp-action="Index">
+                        <i class="bi bi-grid-1x2-fill me-1"></i>Live Dashboard
+                    </a>
+                    <a class="btn btn-info btn-sm fw-semibold text-dark" asp-controller="ServiceRequest" asp-action="Create">
+                        <i class="bi bi-plus-circle-fill me-1"></i>New Service Ticket
+                    </a>
+                    <a class="btn btn-dark btn-sm border-secondary text-light" href="/api/campus/requests" target="_blank" title="Inspect Raw REST API JSON Output">
+                        <i class="bi bi-braces me-1 text-warning"></i>Raw API JSON
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container pb-5 flex-grow-1">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-white py-3 mt-auto">
+        <div class="container d-flex justify-content-between small">
+            <span><strong>Smart Campus Service Portal</strong> &mdash; Integrated MVC + EF Core SQL + REST API</span>
+            <span>.NET Practical #11</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
