@@ -1,0 +1,38 @@
+﻿@model StudentCourseRegistration.Models.Student
+
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<div class="row justify-content-center mt-2">
+    <div class="col-md-7 col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 fw-bold">Student Profile Details</h4>
+                <span class="badge bg-info text-dark fs-6">ID #@Model.Id</span>
+            </div>
+            <div class="card-body p-4 bg-white">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-muted mb-3">@Html.DisplayNameFor(m => m.Id)</dt>
+                    <dd class="col-sm-8 fw-bold mb-3">#@Model.Id</dd>
+
+                    <dt class="col-sm-4 text-muted mb-3">@Html.DisplayNameFor(m => m.Name)</dt>
+                    <dd class="col-sm-8 fw-semibold mb-3">@Model.Name</dd>
+
+                    <dt class="col-sm-4 text-muted mb-3">@Html.DisplayNameFor(m => m.Email)</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Email</dd>
+
+                    <dt class="col-sm-4 text-muted mb-3">@Html.DisplayNameFor(m => m.Course)</dt>
+                    <dd class="col-sm-8 mb-3">@Model.Course</dd>
+
+                    <dt class="col-sm-4 text-muted mb-0">@Html.DisplayNameFor(m => m.Semester)</dt>
+                    <dd class="col-sm-8 mb-0"><span class="badge bg-primary">Semester @Model.Semester</span></dd>
+                </dl>
+            </div>
+            <div class="card-footer bg-light py-3 d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to Student List</a>
+                <a asp-action="Create" class="btn btn-primary">Register Another</a>
+            </div>
+        </div>
+    </div>
+</div>

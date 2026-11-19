@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="p-5 mb-4 bg-white rounded-3 border shadow-sm">
+    <div class="container-fluid py-3 text-center">
+        <span class="badge bg-primary px-3 py-2 mb-3">Marwadi University · .NET Technologies (01CE1523)</span>
+        <h1 class="display-5 fw-bold text-dark">Student Course Registration System</h1>
+        <p class="col-md-8 mx-auto fs-5 text-muted mt-3">
+            A modern ASP.NET Core 8 MVC web application demonstrating Model Binding,
+            Data Annotations validation, Razor Views, and convention-based routing.
+        </p>
+        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center mt-4">
+            <a asp-controller="Student" asp-action="Create" class="btn btn-primary btn-lg px-4 shadow-sm">
+                + Register Student
+            </a>
+            <a asp-controller="Student" asp-action="Index" class="btn btn-outline-dark btn-lg px-4">
+                View Students
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-primary">1. Quick Registration</h5>
+                <p class="card-text text-muted mb-0">
+                    Enroll students into semester courses through an intuitive form with instant validation feedback.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-primary">2. Data Annotations</h5>
+                <p class="card-text text-muted mb-0">
+                    Enforces required fields, character length bounds, email format checks, and semester range (1–8).
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-primary">3. Student Directory</h5>
+                <p class="card-text text-muted mb-0">
+                    View all enrolled students in a structured table and open complete student profiles by ID.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
